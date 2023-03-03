@@ -78,6 +78,23 @@ router.post('/:id/comment', async (req, res) => {
         res.status(500).json(error);
         res.redirect('/')
     }
-})
+});
+
+router.post('/delete/:id', async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        const user = await User.findById(req.body.userId);
+        
+        if (post.userId !== user._id.toString()) {
+            return res.status(403).json({msg: 'could not delete post'});
+        }
+        await post.delete();
+        res.status(200).json({msg: 'deleted post'});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+});
 
 module.exports = router;

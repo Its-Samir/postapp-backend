@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const userAuth = require('./Auth/auth');
@@ -12,6 +13,7 @@ app.use(express.json());
 mongoose.connect(process.env.MONGO_URL).then(()=> {
     console.log('db connected');
 }).catch((err)=> {
+    console.log(err);
     console.log('not db connected');
 });
 
