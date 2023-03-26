@@ -7,7 +7,16 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
+const whiteList = ['https://yourpost.netlify.app'];
+
+const corsOriginFunction = (origin, cb) => {
+    if (whiteList.indexOf(origin) !== -1) {
+        return cb(null, true);
+    }
+    throw new Error('Not allowed by CORS');
+}
+
+app.use(cors({origin: corsOriginFunction}));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URL).then(()=> {
