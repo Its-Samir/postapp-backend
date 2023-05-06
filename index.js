@@ -19,7 +19,7 @@ const corsOriginFunction = (origin, cb) => {
 app.use(cors({origin: corsOriginFunction}));
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/testingDB').then(()=> {
+mongoose.connect(process.env.MONGO_URL).then(()=> {
     console.log('db connected');
 }).catch((err)=> {
     console.log(err);
