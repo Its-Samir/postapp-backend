@@ -43,6 +43,18 @@ router.post('/post', async (req, res) => {
     }
 });
 
+router.get('/post/:id', async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).send({msg: 'No post found with this id'});
+        }
+        res.status(200).send(post);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
 router.put('/:id/like', async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
@@ -77,6 +89,23 @@ router.post('/:id/comment', async (req, res) => {
     } catch (error) {
         res.status(500).json(error);
         res.redirect('/')
+    }
+});
+
+router.put('/update/:id', async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        
+        if (post.userId !== req.body.userId) {
+            return res.status(403).json({msg: 'Could not update post'});
+        }
+        post.title = req.body.title;
+        post.description = req.body.description;
+        await post.save();
+        res.status(200).json({msg: 'Post updated successfully'});
+
+    } catch (error) {
+        res.status(500).json(error);
     }
 });
 

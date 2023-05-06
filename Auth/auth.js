@@ -81,6 +81,19 @@ router.get('/profile', async (req, res)=> {
     } catch (error) {
         res.status(500).json(error);
     }
-})
+});
+
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.find({});
+        if (!users) {
+            return res.status(404).json({msg: 'No users found'});
+        }
+        res.status(200).json(users);
+
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 module.exports = router;
